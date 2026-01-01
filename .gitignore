@@ -1,0 +1,16 @@
+# 1. Ignore only items in the root directory
+/*
+
+# 2. Keep the gitignore file itself
+!/.gitignore
+
+# 3. Whitelist your config folders (Git will enter these and track everything inside)
+!/src/
+!/include/
+
+
+# files 
+!/CMakeLists.txt
+!/.envrc
+!/README.md
+
