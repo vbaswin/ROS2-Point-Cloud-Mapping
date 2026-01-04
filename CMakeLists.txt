@@ -3,12 +3,12 @@ project(minimal_mapping_tool)
 
 # Standard C++17 is required for ROS2 Humble
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD 17)
 endif()
 
 # Compiler warnings for maintainable code
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+    add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
 # 1. Find ROS2 Dependencies
@@ -41,6 +41,9 @@ add_executable(${PROJECT_NAME}
   src/main_window.cpp
   src/ros_node.cpp
   src/cloud_mapper.cpp
+  include/minimal_mapping_tool/main_window.hpp
+  include/minimal_mapping_tool/ros_node.hpp
+  include/minimal_mapping_tool/cloud_mapper.hpp
 )
 
 # 6. Link Libraries
@@ -51,11 +54,19 @@ target_link_libraries(${PROJECT_NAME}
   Qt5::OpenGL
   ${PCL_LIBRARIES}
   ${VTK_LIBRARIES}
-  rclcpp::rclcpp
-  sensor_msgs::sensor_msgs
-  pcl_conversions::pcl_conversions
-  pcl_ros::pcl_ros
 )
+
+ament_target_dependencies(${PROJECT_NAME}
+  rclcpp
+  sensor_msgs
+  pcl_conversions
+  pcl_ros
+)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/
+)
+
 
 # Fix for PCL/VTK integration on Ubuntu 22.04
 add_definitions(-DVTK_QT_VERSION=5)
