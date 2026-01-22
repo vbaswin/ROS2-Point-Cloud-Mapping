@@ -1,0 +1,53 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir/build}",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_COLOR_DIAGNOSTICS": "ON"
+            },
+            "environment": {
+                "QT_LOGGING_RULES": "*.debug=true"
+            }
+        },
+        {
+            "name": "debug",
+            "displayName": "Debug (LLD)",
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXE_LINKER_FLAGS": "-fuse-ld=lld",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fuse-ld=lld"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Release (LLD)",
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_EXE_LINKER_FLAGS": "-fuse-ld=lld",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fuse-ld=lld"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debuga",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        }
+    ]
+}

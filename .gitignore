@@ -7,10 +7,12 @@
 # 3. Whitelist your config folders (Git will enter these and track everything inside)
 !/src/
 !/include/
+!/.vscode/
 
 
 # files 
 !/CMakeLists.txt
 !/.envrc
 !/README.md
-
+!/CMakePresets.json
+!/justfile
