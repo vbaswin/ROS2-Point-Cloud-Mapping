@@ -2,12 +2,21 @@ preset := "debug"
 # hello
 executable := "build/minimal_mapping_tool"
 
+# Status indicatorsj
 SUCCESS := "✅"
 NOTICE  := "ℹ️"
+CAUTION := "⚠️"  
 FAILURE := "❌"
+
+
+
+# Developoment lifecycle
+
+INIT  := "⚙️"
 BUILD   := "🔨"
-RUN     := "▶️"
 LINK    := "🔗"
+RUN     := "▶️"
+CLEAN   := "🧹" 
 
 
 default: run
@@ -16,7 +25,7 @@ init: configure setup
 configure: 
     @if [ -z "$$ROS_DISTRO" ]; then echo {{FAILURE}} "Error: ROS2 is not sourced."; fi
     @echo {{NOTICE}} " Configuring CMake with preset {{preset}}..."
-    @cmake --build --preset {{preset}}
+    @cmake --preset {{preset}}
 
 build: 
     @echo {{BUILD}} " Building project..."

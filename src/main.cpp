@@ -1,40 +1,79 @@
+#include "minimal_mapping_tool/main_window.hpp"
+#include "minimal_mapping_tool/ros_node.hpp"
 #include <QApplication>
 #include <rclcpp/rclcpp.hpp>
 #include <thread>
-#include "minimal_mapping_tool/main_window.hpp"
-#include "minimal_mapping_tool/ros_node.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     // 1. Init Qt and ROS
     QApplication app(argc, argv);
+
+    app.setStyleSheet(R"(
+                       QMainWindow, QWidget {
+                       background-color: #1e1e1e;
+                       color: #d4d4d4;
+                       }
+                       QGroupBox {
+                       border: 1px solid #3c3c3c;
+                       border-radius: 4px;
+                       margin-top: 8px;
+                       padding-top: 8px;
+                       color: #d4d4d4;
+                       background-color: #252526;
+                       }
+                       QGroupBox::title {
+                       subcontrol-origin: margin;
+                       left:10px;
+                       color: #569cd6;
+                       }
+                       QPushButton {
+                       background-color: #0e639c;
+                       color: white;
+                       border: none;
+                       padding: 6px 16px;
+                       border-radius: 3px;
+                       }
+                       QPushButton:hover {
+                       background-color: #1177bb;
+                       }
+                       QPushButton:pressed {
+                       background-color: #094771;
+                       }
+                       QPushButton:checked {
+                       background-color: #16825d;
+                       }
+                       QLabel {
+                       color: #d4d4d4;
+                       })");
+
     rclcpp::init(argc, argv);
-    
+
     // 2. Register Metadata for Signal/Slot
     qRegisterMetaType<PointCloudT::Ptr>("PointCloudT::Ptr");
-    
+
     // 3. Create Node
     auto node = std::make_shared<RosNode>();
-    
+
     // 4. Create Worker Thread for ROS
     // We use std::thread for simplicity. The node lives until main exits.
-    std::thread ros_thread([node](){
+    std::thread ros_thread([node]() {
         rclcpp::spin(node);
     });
-    
+
     // 5. Launch GUI
     MainWindow window(node);
     window.setWindowTitle("ROS2 Point Cloud Mapping Tool");
     window.resize(1024, 768);
     window.show();
-    
+
     // 6. Run Qt Event Loop
     int result = app.exec();
-    
+
     // 7. Cleanup
     rclcpp::shutdown();
     if (ros_thread.joinable()) {
         ros_thread.join();
     }
-    
+
     return result;
 }

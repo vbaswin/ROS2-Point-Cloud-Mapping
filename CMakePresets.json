@@ -9,14 +9,16 @@
             "name": "base",
             "hidden": true,
             "generator": "Ninja",
-            "binaryDir": "${sourceDir/build}",
+            "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_COLOR_DIAGNOSTICS": "ON"
+                "CMAKE_COLOR_DIAGNOSTICS": "ON",
+                "CMAKE_CXX_FLAGS": "-fmessage-length=0"
             },
             "environment": {
-                "QT_LOGGING_RULES": "*.debug=true"
+                "QT_LOGGING_RULES": "*.debug=true",
+                "COLUMNS": "999"
             }
         },
         {
@@ -42,7 +44,7 @@
     ],
     "buildPresets": [
         {
-            "name": "debuga",
+            "name": "debug",
             "configurePreset": "debug"
         },
         {

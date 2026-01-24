@@ -3,13 +3,15 @@
     "configurations": [
         {
             "name": "Run Mapping Tool",
-            "type": "cppdbg",
+            "type": "codelldb",
             "request": "launch",
             "program": "${workspaceFolder}/build/minimal_mapping_tool",
             "args": [],
-            "stopAtEntry": false,
+            "stopOnEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
+            "env": {
+                "LD_LIBRARY_PATH": "/opt/ros/humble/lib:${env:LD_LIBRARY_PATH}"
+            },
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
