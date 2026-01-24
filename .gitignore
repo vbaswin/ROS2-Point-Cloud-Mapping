@@ -12,7 +12,10 @@
 
 # files 
 !/CMakeLists.txt
+!/test_pointcloud_publisher.py
+!/package.xml
 !/.envrc
 !/README.md
 !/CMakePresets.json
+!/depth_camera_world.sdf
 !/justfile
