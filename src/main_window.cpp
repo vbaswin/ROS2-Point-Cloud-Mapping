@@ -69,7 +69,12 @@ void MainWindow::updateCloud(PointCloudT::Ptr cloud) {
     if (!cloud || cloud->empty())
         return;
 
+    static int frame_count = 0;
+    frame_count++;
+
     if (is_mapping_) {
+        if (frame_count % 3 != 0)
+            return;
         // Add to map and get fitness score
         double fitness = mapper_.addCloud(cloud);
 
