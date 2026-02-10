@@ -1,8 +1,8 @@
 #pragma once
-#include <rclcpp/rclcpp.hpp>
-#include <sensor_msgs/msg/point_cloud2.hpp>
 #include <QObject>
 #include <mutex>
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 // Register PCL type for Qt
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -18,7 +18,7 @@ class RosNode : public QObject, public rclcpp::Node {
     Q_OBJECT
 public:
     RosNode();
-    void setTopic(const QString & topic);
+    void setTopic(const QString &topic);
 
 signals:
     // Emitted when a cloud is received/converted

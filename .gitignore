@@ -8,10 +8,12 @@
 !/src/
 !/include/
 !/.vscode/
+!/tests/
 
 
 # files 
 !/CMakeLists.txt
+!/.neotest-gtest.lua
 !/test_pointcloud_publisher.py
 !/package.xml
 !/.envrc

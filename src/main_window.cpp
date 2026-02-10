@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <pcl/visualization/common/common.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderer.h>
 
@@ -69,12 +70,7 @@ void MainWindow::updateCloud(PointCloudT::Ptr cloud) {
     if (!cloud || cloud->empty())
         return;
 
-    static int frame_count = 0;
-    frame_count++;
-
     if (is_mapping_) {
-        if (frame_count % 3 != 0)
-            return;
         // Add to map and get fitness score
         double fitness = mapper_.addCloud(cloud);
 
@@ -83,6 +79,7 @@ void MainWindow::updateCloud(PointCloudT::Ptr cloud) {
         if (!visualizer_->updatePointCloud(map, "cloud")) {
             visualizer_->addPointCloud(map, "cloud");
         }
+        visualizer_->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "cloud");
 
         // Update Dashboard stats
         updateDashboard(fitness, map->size());

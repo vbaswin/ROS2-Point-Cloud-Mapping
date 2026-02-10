@@ -74,4 +74,38 @@ add_definitions(-DVTK_QT_VERSION=5)
 install(TARGETS ${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
 
+
+
+# ============================================================
+# TESTING (Google Test)
+# ============================================================
+# enable_testing() activates CTest, CMake's built-in test runner.
+# This lets you run tests via `ctest` command, which integrates
+# with CI/CD systems (GitHub Actions, Jenkins, etc.)
+enable_testing()
+find_package(GTest REQUIRED)
+
+
+# Test executable for CloudMapper
+# Note: We only link against PCL and GTest — NOT Qt or ROS2.
+# This proves CloudMapper has proper separation of concerns (SRP).
+add_executable(test_cloud_mapper
+      tests/test_cloud_mapper.cpp
+      src/cloud_mapper.cpp                          # the code under test
+      include/minimal_mapping_tool/cloud_mapper.hpp
+)
+
+target_include_directories(test_cloud_mapper PRIVATE
+include
+${PCL_INCLUDE_DIRS}
+)
+
+target_link_libraries(test_cloud_mapper
+    GTest::gtest
+    GTest::gtest_main  # provides main() so you don't write it yourself
+    ${PCL_LIBRARIES}
+)
+add_test(NAME CloudMapperTests COMMAND test_cloud_mapper)
+
+
 ament_package()

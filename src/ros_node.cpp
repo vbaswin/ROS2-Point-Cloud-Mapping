@@ -1,4 +1,3 @@
-
 #include "minimal_mapping_tool/ros_node.hpp"
 #include <cmath>
 #include <pcl_conversions/pcl_conversions.h>
