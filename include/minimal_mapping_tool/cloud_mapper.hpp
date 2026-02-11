@@ -26,6 +26,7 @@ public:
 private:
     CloudPtr global_map_;
     pcl::IterativeClosestPoint<PointT, PointT> icp_;
-    pcl::VoxelGrid<PointT> voxel_filter_;
+    pcl::VoxelGrid<PointT> input_filter_;
+    pcl::VoxelGrid<PointT> map_filter_;
     int frame_count_ = 0;
 };

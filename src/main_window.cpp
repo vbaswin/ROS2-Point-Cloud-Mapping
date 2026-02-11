@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <pcl/visualization/common/common.h>
+#include <pcl/visualization/point_cloud_color_handlers.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderer.h>
 
@@ -72,30 +73,46 @@ void MainWindow::updateCloud(PointCloudT::Ptr cloud) {
 
     if (is_mapping_) {
         // Add to map and get fitness score
-        double fitness = mapper_.addCloud(cloud);
+        const double fitness = mapper_.addCloud(cloud);
+
+        if (fitness == -2.0)
+            return;
 
         // Update Visualizer with full map
         PointCloudT::Ptr map = mapper_.getMap();
-        if (!visualizer_->updatePointCloud(map, "cloud")) {
-            visualizer_->addPointCloud(map, "cloud");
+        if (!map || map->empty())
+            return;
+        pcl::visualization::PointCloudColorHandlerRGBField<PointCloudT::PointType> rgb(map);
+
+        if (!visualizer_->updatePointCloud(map, rgb, "map")) {
+            visualizer_->addPointCloud(map, rgb, "map");
         }
-        visualizer_->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "cloud");
+        visualizer_->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "map");
 
         // Update Dashboard stats
         updateDashboard(fitness, map->size());
     } else {
+        pcl::visualization::PointCloudColorHandlerRGBField<PointCloudT::PointType> rgb(cloud);
         // Just show live feed
-        if (!visualizer_->updatePointCloud(cloud, "cloud")) {
-            visualizer_->addPointCloud(cloud, "cloud");
+        if (!visualizer_->updatePointCloud(cloud, rgb, "cloud")) {
+            visualizer_->addPointCloud(cloud, rgb, "cloud");
         }
+        visualizer_->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "cloud");
     }
     vtk_widget_->renderWindow()->Render();
 }
 
 void MainWindow::toggleMapping(bool checked) {
     is_mapping_ = checked;
-    if (!checked)
+    if (checked) {
+        // Switching TO mapping mode: remove the live feed cloud actor
+        visualizer_->removePointCloud("cloud");
+    } else {
+        // Switching FROM mapping mode: remove the map actor, clear mapper
+
+        visualizer_->removePointCloud("map");
         mapper_.clear(); // Optional: clear on stop
+    }
 }
 
 void MainWindow::saveMap() {
