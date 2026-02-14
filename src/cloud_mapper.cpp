@@ -10,7 +10,7 @@ CloudMapper::CloudMapper() : global_map_(new CloudT) {
     map_filter_.setLeafSize(0.05f, 0.05f, 0.05f);
 
     // Setup ICP: limit distance to 10cm to prevent matching distinct walls
-    icp_.setMaxCorrespondenceDistance(0.5);
+    icp_.setMaxCorrespondenceDistance(0.1);
     icp_.setMaximumIterations(20);
     icp_.setTransformationEpsilon(1e-6);
     icp_.setEuclideanFitnessEpsilon(1e-6);

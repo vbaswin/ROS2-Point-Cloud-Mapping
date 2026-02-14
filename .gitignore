@@ -21,3 +21,4 @@
 !/CMakePresets.json
 !/depth_camera_world.sdf
 !/justfile
+!/vim_teleop.py

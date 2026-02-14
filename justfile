@@ -131,8 +131,10 @@ test-pub:
 teleop:
     @if [ -z "$$ROS_DISTRO" ]; then echo "{{FAILURE}} Error: ROS2 not sourced."; exit 1; fi
     @echo "{{ROBOT}} Launching keyboard teleop..."
-    @echo "{{NOTICE}} Use WASD keys to drive. Press 'q' to quit."
-    @ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/camera_robot/cmd_vel
+    # @echo "{{NOTICE}} Use WASD keys to drive. Press 'q' to quit."
+    # @ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/camera_robot/cmd_vel
+    @echo "{{ROBOT}} Launching vim-style teleop (h=left, j=back, k=forward, l=right)..."
+    @python3 vim_teleop.py
 
 
 # ============================================================

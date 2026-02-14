@@ -33,6 +33,27 @@ void RosNode::topicCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg) 
             continue;
         }
 
+        //  Clip depth range (Z in optical frame = forward distance)
+        //    Keep only 0.1m to 4.0m. Beyond 4m is mostly distant ground
+        //    that adds no useful geometry to the map.
+        if (point.z < 0.1f || point.z > 4.0f) {
+            continue;
+        }
+
+        //  Remove ground plane points.
+        //    In optical frame, Y = down. Camera is ~0.2m above ground.
+        //    Ground points have Y ≈ 0.15 to 0.25 (at camera's feet)
+        //    and Y can be larger for ground further away.
+        //    Keep only Y < 0.1 → everything from camera level and ABOVE.
+        //    This removes the ground while keeping objects (boxes, cylinder).
+        //
+        //    But we also want the sides/fronts of objects that are AT ground
+        //    level. Those have Y ≈ 0.15 but different Z than pure ground.
+        //    Compromise: Y < 0.15 keeps most object surfaces, removes flat ground.
+        if (point.y > 0.15f) {
+            continue;
+        }
+
         std::swap(point.r, point.b);
         filtered_cloud->push_back(point);
     }
